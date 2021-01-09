@@ -1,0 +1,25 @@
+From 0b343dd11c5813ce27a764e35cc35f5f495dc236 Mon Sep 17 00:00:00 2001
+From: ila <ila.embsys@gmail.com>
+Date: Sat, 5 Sep 2020 02:40:36 +0300
+Subject: [PATCH] Add "--disable-libada" in CC_GCC_EXTRA_CONFIG_ARRAY
+
+---
+ config/cc/gcc.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/config/cc/gcc.in b/config/cc/gcc.in
+index 849b1ad0..e9886b8a 100644
+--- a/config/cc/gcc.in
++++ b/config/cc/gcc.in
+@@ -73,7 +73,7 @@ config CC_GCC_CORE_EXTRA_CONFIG_ARRAY
+ 
+ config CC_GCC_EXTRA_CONFIG_ARRAY
+     string "gcc extra config"
+-    default ""
++    default "--disable-libada"
+     help
+       Extra flags to pass onto ./configure when configuring gcc.
+       
+-- 
+2.28.0.windows.1
+

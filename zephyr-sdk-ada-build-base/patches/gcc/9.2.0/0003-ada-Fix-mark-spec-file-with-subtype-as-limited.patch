@@ -1,0 +1,45 @@
+From 6816b0b09cd0c73bbfca3f2d80f43f2f7f6c70dc Mon Sep 17 00:00:00 2001
+From: ila <ila.embsys@gmail.com>
+Date: Mon, 12 Oct 2020 03:40:00 +0300
+Subject: [PATCH] ada: Fix mark spec file with subtype as limited
+
+Add additional check that type is not typedef which will be generated
+as a subtype.
+Otherwise, the subtype can not be accessed if the containing spec marked
+as limited.
+---
+ gcc/c-family/c-ada-spec.c | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/gcc/c-family/c-ada-spec.c b/gcc/c-family/c-ada-spec.c
+index 0c50bdcd856..bcf978143b0 100644
+--- a/gcc/c-family/c-ada-spec.c
++++ b/gcc/c-family/c-ada-spec.c
+@@ -2257,8 +2257,22 @@ dump_ada_node (pretty_printer *buffer, tree node, tree type, int spc,
+ 		    }
+ 
+ 		  if (RECORD_OR_UNION_TYPE_P (TREE_TYPE (node)) && type_name)
+-		    dump_ada_node (buffer, type_name, TREE_TYPE (node), spc,
+-				   is_access, true);
++		  {
++			/* Check if subtype will be generated and unset limited_access.
++			   Conditions similar to the decision to generate subtype */
++			bool is_subtype = false;
++
++			if (TREE_CODE (type_name) == TYPE_DECL)
++			{
++				tree orig = DECL_ORIGINAL_TYPE (type_name);
++
++				if (orig && (TYPE_STUB_DECL (orig)) && (TYPE_NAME (orig) && RECORD_OR_UNION_TYPE_P (orig)))
++					is_subtype = true;
++			}
++
++			dump_ada_node (buffer, type_name, TREE_TYPE (node), spc,
++							is_access && !is_subtype, true);
++		  }
+ 		  else
+ 		    dump_ada_node (buffer, TREE_TYPE (node), TREE_TYPE (node),
+ 				   spc, false, true);
+-- 
+2.28.0.windows.1
+

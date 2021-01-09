@@ -1,0 +1,34 @@
+From 44496b8d57ff9c8bcf99029d815461fde6dd91da Mon Sep 17 00:00:00 2001
+From: ila <ila.embsys@gmail.com>
+Date: Sat, 5 Sep 2020 02:25:34 +0300
+Subject: [PATCH] Enable CC_LANG_ADA for BARE_METAL
+
+---
+ config/cc.in | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/config/cc.in b/config/cc.in
+index 187a48d5..54487e5b 100644
+--- a/config/cc.in
++++ b/config/cc.in
+@@ -70,6 +70,8 @@ config CC_LANG_JAVA
+       Only select this if you know that your specific version of the
+       compiler supports this language.
+ 
++endif # ! BARE_METAL
++
+ config CC_LANG_ADA
+     bool
+     prompt "ADA (EXPERIMENTAL)"
+@@ -81,6 +83,8 @@ config CC_LANG_ADA
+       Only select this if you know that your specific version of the
+       compiler supports this language.
+ 
++if ! BARE_METAL
++
+ config CC_LANG_OBJC
+     bool
+     prompt "Objective-C (EXPERIMENTAL)"
+-- 
+2.28.0.windows.1
+
