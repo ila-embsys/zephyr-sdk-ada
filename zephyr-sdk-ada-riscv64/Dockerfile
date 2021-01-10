@@ -3,7 +3,7 @@ ARG TARGET=riscv64
 #
 # build toolchain image
 #
-FROM zephyrada/zephyr-sdk-ada-build-base as zephyr-sdk-ada-build-riscv64
+FROM zephyrada/zephyr-sdk-ada-build-base:v0.1.0-alpha as zephyr-sdk-ada-build-riscv64
 
 ARG TARGET
 
@@ -28,7 +28,7 @@ RUN cat .config | grep CT_EXPERIMENTAL && \
 
 RUN CT_PREFIX=${OUTPUT_DIR} ${CT_NG} build.$(nproc)
 
-FROM zephyrada/zephyr-sdk-ada-base
+FROM zephyrada/zephyr-sdk-ada-base:v0.1.0-alpha
 
 ARG TARGET=riscv64
 
