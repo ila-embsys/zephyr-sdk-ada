@@ -9,7 +9,11 @@ on:
   pull_request:
 
 jobs:
-  github-cache:
+  build:
+    name: Build Docker image
+    strategy:
+      matrix:
+        build-image: ['zephyr-sdk-ada-base', 'zephyr-sdk-ada-build-base', 'zephyr-sdk-ada-arm', 'zephyr-sdk-ada-riscv64']
     runs-on: ubuntu-latest
     steps:
       -
@@ -20,7 +24,7 @@ jobs:
         id: docker_meta
         uses: crazy-max/ghaction-docker-meta@v1
         with:
-          images: zephyrada/zephyr-sdk-ada-base # list of Docker images to use as base name for tags
+          images: zephyrada/${{ matrix.build-image }} # list of Docker images to use as base name for tags
           tag-sha: true # add git short SHA as Docker tag
       -
         name: Set up Docker Buildx
@@ -45,7 +49,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./zephyr-sdk-ada-base/Dockerfile
+          file: ./${{ matrix.build-image }}/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
@@ -59,4 +63,4 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-          repository: zephyrada/zephyr-sdk-ada-base
+          repository: zephyrada/${{ matrix.build-image }}
