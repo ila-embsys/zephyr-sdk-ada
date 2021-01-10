@@ -45,11 +45,15 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
+        name: Move patch folder due to broken build-push-action context
+        if: matrix.build-image == 'zephyr-sdk-ada-build-base'
+        run: mv zephyr-sdk-ada-build-base/patches patches
+      - 
         name: Build and push
         uses: docker/build-push-action@v2
         with:
-          context: ./${{ matrix.build-image }}
-          file: ./Dockerfile
+          context: .
+          file: ./${{ matrix.build-image }}/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
