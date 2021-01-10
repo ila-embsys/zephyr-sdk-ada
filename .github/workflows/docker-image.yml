@@ -13,7 +13,8 @@ jobs:
     name: Build Docker image
     strategy:
       matrix:
-        build-image: ['zephyr-sdk-ada-base', 'zephyr-sdk-ada-build-base', 'zephyr-sdk-ada-arm', 'zephyr-sdk-ada-riscv64']
+#         build-image: ['zephyr-sdk-ada-base', 'zephyr-sdk-ada-build-base', 'zephyr-sdk-ada-arm', 'zephyr-sdk-ada-riscv64']
+        build-image: ['zephyr-sdk-ada-base', 'zephyr-sdk-ada-build-base']
     runs-on: ubuntu-latest
     steps:
       -
